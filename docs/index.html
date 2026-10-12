@@ -895,7 +895,7 @@ function initAssistant(){
   const loading=document.getElementById("assistantLoading"),fallback=document.getElementById("assistantFallback");
   function fail(){loading.hidden=true;fallback.hidden=false;}
   if(assistantInited)return; const sdk=window.cozeWebSDK; if(!sdk){fail();return;}
-  try{assistantInited=true;sdk.init({projectId:"7683088571875508258",refreshToken:function(){return Promise.resolve("sat_rBmdvCc71ibI3gRBaJd7xN0BVimxA7wnN2r4Io0njHslvGBGT1WrrRduKWS4heSH")},container:document.getElementById("sdkAssistant"),onIframeReady:function(){loading.hidden=true},onTokenInvalid:function(){assistantInited=false;fail()},onNetworkError:function(){assistantInited=false;fail()}});}catch(e){fail();}
+  try{assistantInited=true;sdk.init({projectId:"7683088571875508258",refreshToken:function(){return Promise.resolve("sat_0jfrUHSvAzuaNTwFaG29MS4mxgPmbDxKowOB7Qql62sA1xbYO7Tc0OP48cpOIlkA")},container:document.getElementById("sdkAssistant"),onIframeReady:function(){loading.hidden=true},onTokenInvalid:function(){assistantInited=false;fail()},onNetworkError:function(){assistantInited=false;fail()}});}catch(e){fail();}
 }
 
 async function loadDashboard(){
