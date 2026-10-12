@@ -178,9 +178,9 @@
           </div>
           <div class="dashboard-section" data-dashboard-section="fill" hidden>
             <div id="fillHome">
-              <div class="mode-strip" id="modeStrip">⚡ 当前自动从企微表格拉取 · <a id="modeToggle">切手动</a></div>
+              <div class="mode-strip" id="modeStrip">⚡ 在线表模式（面板登记）· <a id="modeToggle">切手动</a></div>
               <button class="big-toggle nav-toggle" type="button" id="goToday"><span>📝 今日填写<span class="bt-sub">逐群填写当日发言人数，保存后自动写入历史并重算档位</span></span><span class="bt-arrow">›</span></button>
-              <button class="big-toggle nav-toggle" type="button" id="goHist"><span>📋 历史数据<span class="bt-sub">企微表格中的全部记录，可按群查看或看每日活跃快照</span></span><span class="bt-arrow">›</span></button>
+              <button class="big-toggle nav-toggle" type="button" id="goHist"><span>📋 历史数据<span class="bt-sub">在线表中的全部记录，可按群查看或看每日活跃快照</span></span><span class="bt-arrow">›</span></button>
             </div>
             <div id="fillTodayPage" hidden>
               <div class="subpage-head"><button class="subpage-back" type="button" id="backToday" aria-label="返回">‹</button><b>今日填写</b></div>
@@ -220,9 +220,9 @@
           </div>
           <div class="dashboard-section" data-scale-section="scfill" hidden>
             <div id="scFillHome">
-              <div class="mode-strip" id="scModeStrip">⚡ 当前自动从企微表格拉取 · <a id="scModeToggle">切手动</a></div>
+              <div class="mode-strip" id="scModeStrip">⚡ 在线表模式（面板登记）· <a id="scModeToggle">切手动</a></div>
               <button class="big-toggle nav-toggle" type="button" id="goScFill"><span>📝 本期填写<span class="bt-sub">逐群填写本期人数，保存后自动写入历史并更新趋势</span></span><span class="bt-arrow">›</span></button>
-              <button class="big-toggle nav-toggle" type="button" id="goScHist"><span>📋 历史数据<span class="bt-sub">企微表格中的全部记录（支持查找、点格子补改）</span></span><span class="bt-arrow">›</span></button>
+              <button class="big-toggle nav-toggle" type="button" id="goScHist"><span>📋 历史数据<span class="bt-sub">在线表中的全部记录（支持查找、点格子补改）</span></span><span class="bt-arrow">›</span></button>
             </div>
             <div id="scFillPage" hidden>
               <div class="subpage-head"><button class="subpage-back" type="button" id="backScFill" aria-label="返回">‹</button><b>本期填写</b></div>
@@ -524,7 +524,7 @@ function getMode(){try{return localStorage.getItem("redpet_fill_mode")||"auto";}
 function setMode(m){try{localStorage.setItem("redpet_fill_mode",m);}catch(e){}}
 function renderModeStrip(){
   const auto=getMode()!=="manual";
-  document.getElementById("modeStrip").innerHTML=auto?"⚡ 当前自动从企微表格拉取 · <a id=\"modeToggle\">切手动</a>":"✋ 当前为手动填写模式 · <a id=\"modeToggle\">切回自动</a>";
+  document.getElementById("modeStrip").innerHTML=auto?"⚡ 在线表模式（面板登记）· <a id=\"modeToggle\">切手动</a>":"✋ 手动模式 · <a id=\"modeToggle\">切回在线</a>";
   document.getElementById("modeToggle").addEventListener("click",()=>{setMode(auto?"manual":"auto");renderModeStrip();});
 }
 function renderFill(){
@@ -764,7 +764,7 @@ function getScaleMode(){try{return localStorage.getItem("redpet_scale_mode")||"a
 function setScaleMode(m){try{localStorage.setItem("redpet_scale_mode",m);}catch(e){}}
 function renderScaleModeStrip(){
   const auto=getScaleMode()!=="manual";
-  document.getElementById("scModeStrip").innerHTML=auto?"⚡ 当前自动从企微表格拉取 · <a id=\"scModeToggle\">切手动</a>":"✋ 当前为手动填写模式 · <a id=\"scModeToggle\">切回自动</a>";
+  document.getElementById("scModeStrip").innerHTML=auto?"⚡ 在线表模式（面板登记）· <a id=\"scModeToggle\">切手动</a>":"✋ 手动模式 · <a id=\"scModeToggle\">切回在线</a>";
   document.getElementById("scModeToggle").addEventListener("click",()=>{setScaleMode(auto?"manual":"auto");renderScaleModeStrip();});
 }
 function scaleDates(){return Object.keys(scaleRaw.records).sort();}
