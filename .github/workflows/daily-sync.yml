@@ -1,0 +1,53 @@
+name: redpet-daily-sync
+
+on:
+  schedule:
+    # 北京时间 11:03 与 15:23 各跑一次（GitHub 服务器用 UTC，减 8 小时）
+    - cron: "3 3 * * *"
+    - cron: "23 7 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 装 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 装 Node 20（@wecom/cli 需要）
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 装 @wecom/cli
+        run: npm install -g @wecom/cli
+
+      - name: 把 npm 全局 bin 加入 PATH（确保 wecom-cli 可调用）
+        run: echo "$(npm prefix -g)/bin" >> "$GITHUB_PATH"
+
+      - name: 恢复企微机器人凭证（从 Secrets）
+        run: |
+          mkdir -p ~/.config/wecom
+          echo "${{ secrets.WECOM_CREDENTIALS }}" | base64 -d > ~/.config/wecom/credentials.enc
+          echo "${{ secrets.WECOM_ENCRYPTION_KEY }}" | base64 -d > ~/.config/wecom/.encryption_key
+
+      - name: 读两张企微表 -> 生成 JSON
+        run: python scripts/sync.py
+
+      - name: 把 JSON 注入 docs/index.html
+        run: python scripts/inject_data.py
+
+      - name: 推送（有变化才推）
+        run: |
+          git config user.name "redpet-bot"
+          git config user.email "bot@redpet.local"
+          git add docs/index.html daily_data.json scale_data.json
+          git commit -m "auto sync $(date +'%Y-%m-%d %H:%M')" || echo "no-change"
+          git push
