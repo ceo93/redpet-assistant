@@ -10,6 +10,7 @@ REDPET 看板自动同步 · 读企微两张表 -> 生成 docs/index.html 需要
 import subprocess
 import json
 import re
+import unicodedata
 from datetime import datetime, timezone, timedelta
 
 DOC_DAILY = "e3_ASUARQa5AEYCN6JG5OQtGTKy0kxmk"  # 每日活跃数量整理【内】
@@ -42,12 +43,21 @@ def rows_of(content):
 
 
 def norm_date(label):
-    """把表头里的日期标签归一成 2026-08-10 这种 ISO 日期。"""
+    """把表头里的日期标签归一成 2026-08-10 这种 ISO 日期。
+
+    兼容历史表头里的各种写法：
+      8.10数量 / 8.7人数 / 9月18日 / 9-12数量 / 9.25 / 10.1 / ８.２６数量（全角）
+    """
     label = label.strip()
-    m = re.match(r"^(\d+)\.(\d+)(数量|人数)$", label)        # 8.10数量 / 8.7人数
+    # 全角数字/标点统一转成半角，再清掉空格和量词后缀
+    label = unicodedata.normalize("NFKC", label)
+    label = label.replace(" ", "").replace("数量", "").replace("人数", "")
+    # 8.10 / 8-12 / 9.25 / 10.1
+    m = re.match(r"^(\d+)[\-\.](\d+)$", label)
     if m:
         return f"{YEAR}-{int(m.group(1)):02d}-{int(m.group(2)):02d}"
-    m = re.match(r"^(\d+)月(\d+)日$", label)                 # 9月18日 / 10月9日
+    # 9月18日 / 10月9日
+    m = re.match(r"^(\d+)月(\d+)日$", label)
     if m:
         return f"{YEAR}-{int(m.group(1)):02d}-{int(m.group(2)):02d}"
     return None
